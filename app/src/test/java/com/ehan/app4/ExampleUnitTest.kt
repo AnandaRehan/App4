@@ -1,4 +1,4 @@
-package com.example.template
+package com.ehan.app4
 
 import org.junit.Assert.*
 import org.junit.Test

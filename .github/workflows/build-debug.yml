@@ -42,8 +42,9 @@ jobs:
       - name: Upload Debug APK
         uses: actions/upload-artifact@v6
         with:
-          name: template-debug-apk
+          name: app4-debug-apk
           path: app/build/outputs/apk/debug/*.apk
+          retention-days: 7
 
       - name: Upload Test Results
         if: always()
@@ -62,6 +63,7 @@ jobs:
           path: |
             app/src/test/screenshots/*.png
           if-no-files-found: ignore
+          retention-days: 7
 
       - name: Upload UI Screenshots roborazzi
         if: always()
@@ -71,3 +73,4 @@ jobs:
           path: |
             app/build/outputs/roborazzi/*.png
           if-no-files-found: ignore
+          retention-days: 7

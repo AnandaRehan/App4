@@ -2,7 +2,7 @@ package com.ehan.app4
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
-import com.ehan.app4.ui.theme.TemplateTheme
+import com.ehan.app4.ui.theme.App4Theme
 import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.captureRoboImage
 import org.junit.Rule
@@ -24,13 +24,13 @@ class GreetingScreenshotTest {
 
   @Test
   fun greetingScreenshot() {
-    composeTestRule.setContent { TemplateTheme { GreetingPreview() } }
+    composeTestRule.setContent { App4Theme { GreetingPreview() } }
 
     composeTestRule.onRoot().captureRoboImage(filePath = "src/test/screenshots/greeting.png")
   }
   @Test
   fun greeting2Screenshot() {
-    composeTestRule.setContent { TemplateTheme { Greeting("Robolectric") } }
+    composeTestRule.setContent { App4Theme { Greeting("Robolectric") } }
 
     composeTestRule.onRoot().captureRoboImage(filePath = "src/test/screenshots/greeting2.png")
   }

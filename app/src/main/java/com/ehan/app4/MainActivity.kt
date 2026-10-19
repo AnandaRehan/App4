@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         
         setContent {
-            TemplateTheme {
+            App4Theme {
                 Greeting(
                     name = "App4"
                 )

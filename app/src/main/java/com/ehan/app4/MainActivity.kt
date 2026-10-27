@@ -86,6 +86,7 @@ private val EqualsKey = Color(0xFF5CB7A5)
 private fun CalculatorScreen() {
     var expression by rememberSaveable { mutableStateOf("") }
     var lastWasResult by rememberSaveable { mutableStateOf(false) }
+    var topBarChange by rememberSaveable { mutableStateOf<TopBarList>(TopBarList.MAIN) }
     val preview = remember(expression) { CalculatorEngine.evaluate(expression) }
 
     fun enterDigit(digit: String) {
@@ -204,30 +205,32 @@ private fun CalculatorScreen() {
                 .padding(horizontal = 20.dp, vertical = 18.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            Header()
+            Header(topBarChange = topBarChange)
 
-            DisplayPanel(
-                modifier = Modifier.weight(0.34f),
-                expression = expression,
-                preview = preview,
-                onBackspace = {
-                    if (expression.isNotEmpty()) {
-                        expression = expression.dropLast(1)
-                        lastWasResult = false
-                    }
+            when (topBarChange) {
+                TopBarList.MAIN -> {
+                    MainBarScreen(
+                        topBarChange = topBarChange,
+                        expression = expression,
+                        preview = preview,
+                        onBackspace = {
+                            if (expression.isNotEmpty()) {
+                                expression = expression.dropLast(1)
+                                lastWasResult = false
+                            }
+                        },
+                        onKeyPress = ::press
+                    )
+                } else -> {
+                    Text("Belum Diatur")
                 }
-            )
-
-            Keypad(
-                modifier = Modifier.weight(0.66f),
-                onKeyPress = ::press
-            )
+            }
         }
     }
 }
 
 @Composable
-private fun Header() {
+private fun Header(topBarChange: TopBarList) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -235,24 +238,50 @@ private fun Header() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
+
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Surface(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(15.dp)),
-                shape = RoundedCornerShape(15.dp),
-                color = Color(0xFFD7EDEB)
+            Button(
+                onClick = {
+                
+                }
             ) {
-                Box(
-                    modifier = Modifier.padding(10.dp),
-                    contentAlignment = Alignment.Center
+                Text("More")
+            }
+            
+            if (topBarChange != TopBarList.MAIN) {
+                Surface(
+                    modifier = Modifier
+                        .padding(start = 11.dp)
+                        .clip(RoundedCornerShape(15.dp)),
+                    shape = RoundedCornerShape(15.dp),
+                    color = Color(0xFFD7EDEB)
                 ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Calculate,
-                        contentDescription = null,
-                        tint = Color(0xFF388B83)
-                    )
+                    Box(
+                        modifier = Modifier.padding(10.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        IconButton(onClick = {
+                            topBarChange = TopBarList.MAIN
+                        }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Calculate,
+                                contentDescription = null,
+                                tint = Color(0xFF388B83)
+                            )
+                        }
+                    }
                 }
             }
+            if (topBarChange != TopBarList.LAINNYA) {
+                Button(
+                    onClick = {
+                        topBarChange = TopBarList.LAINNYA
+                    }
+                ) {
+                    Text("Lainnya")
+                }
+            }
+            /**
             Column(modifier = Modifier.padding(start = 11.dp)) {
                 Text(
                     text = "Kalkulator",
@@ -267,7 +296,7 @@ private fun Header() {
                     fontWeight = FontWeight.SemiBold,
                     letterSpacing = 1.2.sp
                 )
-            }
+            }*/
         }
 
         Surface(
@@ -287,67 +316,102 @@ private fun Header() {
 }
 
 @Composable
+private fun MainBarScreen(
+    expression: String,
+    preview: Double?,
+    onBackspace: () -> Unit,
+    onKeyPress: (String) -> Unit
+) {
+    DisplayPanel(
+        modifier = Modifier.weight(0.34f),
+        topBarChange = TopBarList.MAIN,
+        expression = expression,
+        preview = preview,
+        onBackspace = {
+            if (expression.isNotEmpty()) {
+                expression = expression.dropLast(1)
+                lastWasResult = false
+            }
+        }
+    )
+
+    Keypad(
+        modifier = Modifier.weight(0.66f),
+        onKeyPress = ::press
+    )
+}
+
+@Composable
 private fun DisplayPanel(
     modifier: Modifier = Modifier,
+    topBarChange: TopBarList,
     expression: String,
     preview: Double?,
     onBackspace: () -> Unit
 ) {
-    Surface(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
-        color = Color(0xFFE6EAF8),
-        shadowElevation = 1.dp
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+    when (topBarChange) {
+        TopBarList.MAIN -> {
+            Surface(
+                modifier = modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(28.dp),
+                color = Color(0xFFE6EAF8),
+                shadowElevation = 1.dp
             ) {
-                Text(
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 20.dp, vertical = 16.dp),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                 /** Text(
                     text = "HASIL SAAT INI",
                     color = MutedInk,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.2.sp
                 )
-                IconButton(onClick = onBackspace) {
-                    Icon(
-                        imageVector = Icons.Filled.Backspace,
-                        contentDescription = "Hapus karakter terakhir",
-                        tint = Color(0xFF71809F)
+                */
+                        IconButton(onClick = onBackspace) {
+                            Icon(
+                                imageVector = Icons.Filled.Backspace,
+                                contentDescription = "Hapus karakter terakhir",
+                                tint = Color(0xFF71809F)
+                            )
+                        }
+                    }
+
+                    Text(
+                        text = expression.toDisplayExpression().ifEmpty { "0" },
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Ink,
+                        fontSize = 25.sp,
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.End,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    Text(
+                        text = preview?.let { CalculatorEngine.formatNumber(it) }
+                            ?: if (expression.isEmpty()) "0" else "—",
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Color(0xFF438F91),
+                        fontSize = 39.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.End,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }
-
-            Text(
-                text = expression.toDisplayExpression().ifEmpty { "0" },
-                modifier = Modifier.fillMaxWidth(),
-                color = Ink,
-                fontSize = 25.sp,
-                fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.End,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Text(
-                text = preview?.let { CalculatorEngine.formatNumber(it) }
-                    ?: if (expression.isEmpty()) "0" else "—",
-                modifier = Modifier.fillMaxWidth(),
-                color = Color(0xFF438F91),
-                fontSize = 39.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.End,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+        }
+        else -> {
+            Text("Belum Diatur")
         }
     }
 }
@@ -386,7 +450,8 @@ private fun Keypad(
             CalculatorKey("+", Modifier.weight(1f), KeyStyle.Operator, onKeyPress)
         }
         KeyRow {
-            CalculatorKey("0", Modifier.weight(2f), KeyStyle.Number, onKeyPress)
+            CalculatorKey("00", Modifier.weight(1f), KeyStyle.Number, onKeyPress)
+            CalculatorKey("0", Modifier.weight(1f), KeyStyle.Number, onKeyPress)
             CalculatorKey(".", Modifier.weight(1f), KeyStyle.Number, onKeyPress)
             CalculatorKey("=", Modifier.weight(1f), KeyStyle.Equals, onKeyPress)
         }
@@ -410,6 +475,12 @@ private enum class KeyStyle {
     Function,
     Operator,
     Equals
+}
+
+private enum class TopBarList {
+    MAIN,
+    UANG,
+    LAINNYA;
 }
 
 @Composable

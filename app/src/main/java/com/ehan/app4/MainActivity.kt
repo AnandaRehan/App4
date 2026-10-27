@@ -90,7 +90,7 @@ private val OperatorKey = Color(0xFFD9EBF7)
 private val EqualsKey = Color(0xFF5CB7A5)
 
 @Composable
-private fun CalculatorScreen(viewModel: ViewModel) {
+private fun CalculatorScreen(viewModel: CalculatorViewModel) {
     val lifecycleOwner = LocalLifecycleOwner.current
 
     var expression by rememberSaveable { mutableStateOf("") }

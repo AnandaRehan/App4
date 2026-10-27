@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.weight
+// import androidx.compose.foundation.layout.weight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -223,15 +223,21 @@ private fun CalculatorScreen(viewModel: CalculatorViewModel) {
 
             when (topBarChange) {
                 TopBarList.MAIN -> {
-                    MainBarScreen(
+                    DisplayPanel(
+                        modifier = Modifier.weight(0.34f),
+                        topBarChange = TopBarList.MAIN,
                         expression = expression,
                         preview = preview,
-                        onBackspace = {
+                        onBackspace =  {
                             if (expression.isNotEmpty()) {
                                 expression = expression.dropLast(1)
                                 lastWasResult = false
                             }
-                        },
+                        }
+                    )
+
+                    Keypad(
+                        modifier = Modifier.weight(0.66f),
                         onKeyPress = ::press
                     )
                 } else -> {
@@ -330,27 +336,6 @@ private fun Header(
             )
         }
     }
-}
-
-@Composable
-private fun MainBarScreen(
-    expression: String,
-    preview: Double?,
-    onBackspace: () -> Unit,
-    onKeyPress: (String) -> Unit
-) {
-    DisplayPanel(
-        modifier = Modifier.weight(0.34f),
-        topBarChange = TopBarList.MAIN,
-        expression = expression,
-        preview = preview,
-        onBackspace = onBackspace
-    )
-
-    Keypad(
-        modifier = Modifier.weight(0.66f),
-        onKeyPress = onKeyPress
-    )
 }
 
 @Composable

@@ -214,7 +214,12 @@ private fun CalculatorScreen(viewModel: CalculatorViewModel) {
                 .padding(horizontal = 20.dp, vertical = 18.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            Header(topBarChange = topBarChange, topBarChangeSet = viewModel.topBarChangeSet)
+            Header(
+                topBarChange = topBarChange,
+                topBarChangeSet = { topBarChangeNew ->
+                    viewModel.topBarChangeSet(topBarChangeNew)
+                }
+            )
 
             when (topBarChange) {
                 TopBarList.MAIN -> {
@@ -238,7 +243,10 @@ private fun CalculatorScreen(viewModel: CalculatorViewModel) {
 }
 
 @Composable
-private fun Header(topBarChange: TopBarList, topBarChangeSet: (TopBarList) -> Unit) {
+private fun Header(
+    topBarChange: TopBarList,
+    topBarChangeSet: (TopBarList) -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

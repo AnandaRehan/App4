@@ -21,9 +21,36 @@ class MainScreenScreenshotTest {
     val composeRule = createComposeRule()
 
     @Test
-    fun calcScreen() {
+    fun calcScreen1() {
         composeRule.setContent {
             MainScreenPreview()
+        }
+        // Saved to app/src/test/screenshots/<package>.<class>.<method>.png
+        composeRule.onRoot().captureRoboImage()
+    }
+
+    @Test
+    fun calcScreen2() {
+        composeRule.setContent {
+            MainScreenPreview(2)
+        }
+        // Saved to app/src/test/screenshots/<package>.<class>.<method>.png
+        composeRule.onRoot().captureRoboImage()
+    }
+
+    @Test
+    fun calcScreen3() {
+        composeRule.setContent {
+            MainScreenPreview(3)
+        }
+        // Saved to app/src/test/screenshots/<package>.<class>.<method>.png
+        composeRule.onRoot().captureRoboImage()
+    }
+
+    @Test
+    fun calcScreen4() {
+        composeRule.setContent {
+            MainScreenPreview(4)
         }
         // Saved to app/src/test/screenshots/<package>.<class>.<method>.png
         composeRule.onRoot().captureRoboImage()

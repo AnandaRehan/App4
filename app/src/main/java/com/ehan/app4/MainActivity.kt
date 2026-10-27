@@ -266,7 +266,13 @@ private fun Header(
                     onClick = {
                     }
                 ) {
-                    Text("More")
+                    Text(
+                        text = "More",
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp),
+                        color = Color(0xFF67689A),
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.8.sp)
                 }
             }
 
@@ -517,9 +523,39 @@ private fun CalculatorKey(
 
 @Preview(showBackground = true)
 @Composable
-fun MainScreenPreview() {
-    App4Theme {
-        MainScreen()
+fun MainScreenPreview(code: Int = 1) {
+    val viewModel: CalculatorViewModel = viewModel()
+    when (code) {
+        2 -> {
+            App4Theme(
+                darkTheme = true
+            ) {
+                MainScreen(viewModel = viewModel)
+            }
+        }
+        3 -> {
+            App4Theme(
+                darkTheme = false
+            ) {
+                viewModel.topBarChangeSet(TopBarList.LAINNYA)
+                MainScreen(viewModel = viewModel)
+            }
+        }
+        4 -> {
+            App4Theme(
+                darkTheme = true
+            ) {
+                viewModel.topBarChangeSet(TopBarList.LAINNYA)
+                MainScreen(viewModel = viewModel)
+            }
+        }
+        else -> {
+            App4Theme(
+                darkTheme = false
+            ) {
+                MainScreen(viewModel = viewModel)
+            }
+        }
     }
 }
 

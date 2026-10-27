@@ -535,7 +535,11 @@ private fun CalculatorKey(
 @Composable
 fun MainScreenPreview() {
     App4Theme {
-        MainScreen()
+        Surface(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Text("Kalkulator")
+        }
     }
 }
 

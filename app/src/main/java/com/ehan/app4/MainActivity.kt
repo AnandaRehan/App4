@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-// import androidx.compose.foundation.layout.weight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -321,7 +320,7 @@ private fun Header(
                 )
             }*/
         }
-
+/**
         Surface(
             shape = CircleShape,
             color = Color(0xFFE5E3F7)
@@ -334,7 +333,7 @@ private fun Header(
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 0.8.sp
             )
-        }
+        }*/
     }
 }
 
@@ -520,11 +519,7 @@ private fun CalculatorKey(
 @Composable
 fun MainScreenPreview() {
     App4Theme {
-        Surface(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Text("Kalkulator")
-        }
+        MainScreen()
     }
 }
 

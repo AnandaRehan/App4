@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.Button
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Backspace
 import androidx.compose.material.icons.outlined.Calculate
@@ -41,6 +42,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewModelScope
 import com.ehan.app4.ui.theme.App4Theme
 
 class MainActivity : ComponentActivity() {
@@ -56,8 +62,8 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
-    CalculatorScreen()
+fun MainScreen(modifier: Modifier = Modifier, viewModel: CalculatorViewModel = viewModel()) {
+    CalculatorScreen(viewModel)
     // Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
     //     Surface(
     //         modifier = modifier
@@ -83,10 +89,12 @@ private val OperatorKey = Color(0xFFD9EBF7)
 private val EqualsKey = Color(0xFF5CB7A5)
 
 @Composable
-private fun CalculatorScreen() {
+private fun CalculatorScreen(viewModel: ViewModel) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+
     var expression by rememberSaveable { mutableStateOf("") }
     var lastWasResult by rememberSaveable { mutableStateOf(false) }
-    var topBarChange by rememberSaveable { mutableStateOf<TopBarList>(TopBarList.MAIN) }
+    val topBarChange by viewModel.topBarChange.collectAsStateWithLifecycle(lifecycleOwner = lifecycleOwner)
     val preview = remember(expression) { CalculatorEngine.evaluate(expression) }
 
     fun enterDigit(digit: String) {
@@ -205,12 +213,11 @@ private fun CalculatorScreen() {
                 .padding(horizontal = 20.dp, vertical = 18.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            Header(topBarChange = topBarChange)
+            Header(viewModel = viewModel)
 
             when (topBarChange) {
                 TopBarList.MAIN -> {
                     MainBarScreen(
-                        topBarChange = topBarChange,
                         expression = expression,
                         preview = preview,
                         onBackspace = {
@@ -230,7 +237,7 @@ private fun CalculatorScreen() {
 }
 
 @Composable
-private fun Header(topBarChange: TopBarList) {
+private fun Header(topBarChange: TopBarList, topBarChangeSet: (TopBarList) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -240,12 +247,13 @@ private fun Header(topBarChange: TopBarList) {
     ) {
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Button(
-                onClick = {
-                
+            if (topBarChange == TopBarList.MAIN) {
+                Button(
+                    onClick = {
+                    }
+                ) {
+                    Text("More")
                 }
-            ) {
-                Text("More")
             }
             
             if (topBarChange != TopBarList.MAIN) {
@@ -261,7 +269,7 @@ private fun Header(topBarChange: TopBarList) {
                         contentAlignment = Alignment.Center
                     ) {
                         IconButton(onClick = {
-                            topBarChange = TopBarList.MAIN
+                            topBarChangeSet(TopBarList.MAIN)
                         }) {
                             Icon(
                                 imageVector = Icons.Outlined.Calculate,
@@ -275,7 +283,7 @@ private fun Header(topBarChange: TopBarList) {
             if (topBarChange != TopBarList.LAINNYA) {
                 Button(
                     onClick = {
-                        topBarChange = TopBarList.LAINNYA
+                        topBarChangeSet(TopBarList.LAINNYA)
                     }
                 ) {
                     Text("Lainnya")

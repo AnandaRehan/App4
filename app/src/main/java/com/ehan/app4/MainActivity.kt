@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.weight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -55,7 +56,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             App4Theme {
-                CalculatorScreen()
+                MainScreen()
             }
         }
     }
@@ -255,7 +256,7 @@ private fun Header(topBarChange: TopBarList, topBarChangeSet: (TopBarList) -> Un
                     Text("More")
                 }
             }
-            
+
             if (topBarChange != TopBarList.MAIN) {
                 Surface(
                     modifier = Modifier
@@ -335,17 +336,12 @@ private fun MainBarScreen(
         topBarChange = TopBarList.MAIN,
         expression = expression,
         preview = preview,
-        onBackspace = {
-            if (expression.isNotEmpty()) {
-                expression = expression.dropLast(1)
-                lastWasResult = false
-            }
-        }
+        onBackspace = onBackspace
     )
 
     Keypad(
         modifier = Modifier.weight(0.66f),
-        onKeyPress = ::press
+        onKeyPress = onKeyPress
     )
 }
 
@@ -485,7 +481,7 @@ private enum class KeyStyle {
     Equals
 }
 
-private enum class TopBarList {
+enum class TopBarList {
     MAIN,
     UANG,
     LAINNYA;
@@ -531,7 +527,7 @@ private fun CalculatorKey(
 @Composable
 fun MainScreenPreview() {
     App4Theme {
-        CalculatorScreen()
+        MainScreen()
     }
 }
 

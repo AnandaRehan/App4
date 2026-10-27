@@ -21,17 +21,6 @@ class MainScreenScreenshotTest {
     val composeRule = createComposeRule()
 
     @Test
-    fun mainScreen() {
-        composeRule.setContent {
-            App4Theme {
-                MainScreen()
-            }
-        }
-        // Saved to app/src/test/screenshots/<package>.<class>.<method>.png
-        composeRule.onRoot().captureRoboImage()
-    }
-
-    @Test
     fun calcScreen() {
         composeRule.setContent {
             MainScreenPreview()

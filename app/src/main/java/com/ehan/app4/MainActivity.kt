@@ -373,7 +373,7 @@ private fun DisplayPanel(
                 */
                         IconButton(onClick = onBackspace) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Filled.Backspace.,
+                                imageVector = Icons.AutoMirrored.Filled.Backspace,
                                 contentDescription = "Hapus karakter terakhir",
                                 tint = Color(0xFF71809F)
                             )

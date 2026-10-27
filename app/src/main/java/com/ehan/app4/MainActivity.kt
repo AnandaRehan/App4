@@ -214,7 +214,7 @@ private fun CalculatorScreen(viewModel: CalculatorViewModel) {
                 .padding(horizontal = 20.dp, vertical = 18.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            Header(viewModel = viewModel)
+            Header(topBarChange = topBarChange, viewModel.topBarChangeSet)
 
             when (topBarChange) {
                 TopBarList.MAIN -> {

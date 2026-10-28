@@ -267,7 +267,7 @@ private fun Header(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val tabs = listOf(
+            val tabs<List<TopBarList>> = listOf(
                 TopBarList.MAIN,
                 TopBarList.UANG,
                 TopBarList.LAINNYA

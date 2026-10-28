@@ -1,6 +1,7 @@
 package com.ehan.app4
 
 import android.os.Bundle
+import android.app.Application
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -45,6 +46,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.ViewModel
@@ -288,9 +290,9 @@ private fun Header(
                     imageVector = tab.icon,
                     contentDescription = "Tab $index",
                     tint = if (topBarChange == tab) {
-                        ActiveOrange
+                        activeOrange
                     } else {
-                        InactiveGray
+                        inactiveGray
                     },
                     modifier = Modifier.size(30.dp)
                 )
@@ -609,12 +611,16 @@ fun DisplayPanelPreview() {
     }
 }
 
+
 @Preview(showBackground = true, name = "Main Screen")
 @Composable
 fun MainScreenPreview() {
+    val context = LocalContext.current
+    val app = context.applicationContext as Application
+
     App4Theme {
-        val previewViewModel = remember {
-            CalculatorViewModel().apply {
+        val previewViewModel = remember(app) {
+            CalculatorViewModel(app).apply {
                 topBarChangeSet(TopBarList.MAIN)
             }
         }
@@ -626,9 +632,12 @@ fun MainScreenPreview() {
 @Preview(showBackground = true, name = "Main Screen - Lainnya")
 @Composable
 fun MainScreenPreviewOtherTab() {
+    val context = LocalContext.current
+    val app = context.applicationContext as Application
+
     App4Theme {
-        val previewViewModel = remember {
-            CalculatorViewModel().apply {
+        val previewViewModel = remember(app) {
+            CalculatorViewModel(app).apply {
                 topBarChangeSet(TopBarList.LAINNYA)
             }
         }

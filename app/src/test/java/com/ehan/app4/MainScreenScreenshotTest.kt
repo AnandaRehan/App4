@@ -21,7 +21,34 @@ class MainScreenScreenshotTest {
     val composeRule = createComposeRule()
 
     @Test
-    fun calcScreen1() {
+    fun Header() {
+        composeRule.setContent {
+            HeaderPreview()
+        }
+        // Saved to app/src/test/screenshots/<package>.<class>.<method>.png
+        composeRule.onRoot().captureRoboImage()
+    }
+
+    @Test
+    fun HeaderOtherTab() {
+        composeRule.setContent {
+            HeaderPreviewOtherTab()
+        }
+        // Saved to app/src/test/screenshots/<package>.<class>.<method>.png
+        composeRule.onRoot().captureRoboImage()
+    }
+
+    @Test
+    fun DisplayPanel() {
+        composeRule.setContent {
+            DisplayPanelPreview()
+        }
+        // Saved to app/src/test/screenshots/<package>.<class>.<method>.png
+        composeRule.onRoot().captureRoboImage()
+    }
+
+    @Test
+    fun MainScreen() {
         composeRule.setContent {
             MainScreenPreview()
         }
@@ -30,27 +57,9 @@ class MainScreenScreenshotTest {
     }
 
     @Test
-    fun calcScreen2() {
+    fun MainScreenOtherTab() {
         composeRule.setContent {
-            MainScreenPreview(2)
-        }
-        // Saved to app/src/test/screenshots/<package>.<class>.<method>.png
-        composeRule.onRoot().captureRoboImage()
-    }
-
-    @Test
-    fun calcScreen3() {
-        composeRule.setContent {
-            MainScreenPreview(3)
-        }
-        // Saved to app/src/test/screenshots/<package>.<class>.<method>.png
-        composeRule.onRoot().captureRoboImage()
-    }
-
-    @Test
-    fun calcScreen4() {
-        composeRule.setContent {
-            MainScreenPreview(4)
+            MainScreenPreviewOtherTab()
         }
         // Saved to app/src/test/screenshots/<package>.<class>.<method>.png
         composeRule.onRoot().captureRoboImage()

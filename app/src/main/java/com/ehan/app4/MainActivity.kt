@@ -65,7 +65,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier, viewModel: CalculatorViewModel = viewModel()) {
+fun MainScreen(
+    modifier: Modifier = Modifier,
+    viewModel: CalculatorViewModel = viewModel()
+) {
     CalculatorScreen(viewModel)
     // Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
     //     Surface(
@@ -83,15 +86,15 @@ fun MainScreen(modifier: Modifier = Modifier, viewModel: CalculatorViewModel = v
     // }
 }
 
-private val PageBackground = Color(0xFFF3F4FF)
-private val Ink = Color(0xFF26375A)
-private val MutedInk = Color(0xFF8791AE)
-private val NumberKey = Color(0xFFE8E9FA)
-private val FunctionKey = Color(0xFFD8F0EA)
-private val OperatorKey = Color(0xFFD9EBF7)
-private val EqualsKey = Color(0xFF5CB7A5)
-private val InactiveGray = Color(0xFF777777)
-private val ActiveOrange = Color(0xFFFF7043)
+private val pageBackground = Color(0xFFF3F4FF)
+private val ink = Color(0xFF26375A)
+private val mutedInk = Color(0xFF8791AE)
+private val numberKey = Color(0xFFE8E9FA)
+private val functionKey = Color(0xFFD8F0EA)
+private val operatorKey = Color(0xFFD9EBF7)
+private val equalsKey = Color(0xFF5CB7A5)
+private val inactiveGray = Color(0xFF777777)
+private val activeOrange = Color(0xFFFF7043)
 
 @Composable
 private fun CalculatorScreen(viewModel: CalculatorViewModel) {
@@ -177,15 +180,14 @@ private fun CalculatorScreen(viewModel: CalculatorViewModel) {
         }
         lastWasResult = false
     }
-
     fun press(key: String) {
-        when (key) {
-            "AC" -> {
+        when {
+            key == "AC" -> {
                 expression = ""
                 lastWasResult = false
             }
-            "±" -> toggleSign()
-            "%" -> {
+            key == "±" -> toggleSign()
+            key == "%" -> {
                 if (expression.lastOrNull()?.isDigit() == true ||
                     expression.lastOrNull() == '.'
                 ) {
@@ -193,24 +195,24 @@ private fun CalculatorScreen(viewModel: CalculatorViewModel) {
                     lastWasResult = false
                 }
             }
-            "÷" -> enterOperator("/")
-            "×" -> enterOperator("*")
-            "−" -> enterOperator("-")
-            "+" -> enterOperator("+")
-            "." -> enterDecimalPoint()
-            "=" -> {
+            key == "÷" -> enterOperator("/")
+            key == "×" -> enterOperator("*")
+            key == "−" -> enterOperator("-")
+            key == "+" -> enterOperator("+")
+            key == "." -> enterDecimalPoint()
+            key == "=" -> {
                 preview?.let { result ->
                     expression = CalculatorEngine.formatNumber(result)
                     lastWasResult = true
                 }
             }
-            else -> if (key.all(Char::isDigit)) enterDigit(key)
+            key.all(Char::isDigit) -> enterDigit(key)
         }
     }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = PageBackground
+        color = pageBackground
     ) {
         Column(
             modifier = Modifier
@@ -257,46 +259,43 @@ private fun Header(
     topBarChange: TopBarList,
     topBarChangeSet: (TopBarList) -> Unit
 ) {
+    val tabs = listOf(
+        TopBarList.MAIN,
+        TopBarList.UANG,
+        TopBarList.LAINNYA
+    )
     Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = 24.dp,
-                    vertical = 16.dp
-                ),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val tabs = listOf(
-                TopBarList.MAIN,
-                TopBarList.UANG,
-                TopBarList.LAINNYA
-            )
-
-            tabs.forEachIndexed { index, topBar ->
-                if (topBar != topBarChange) {
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable {
-                            topBarChangeSet(topBar)
-                        }
-                        .padding(vertical = 8.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = topBar.icon,
-                        contentDescription = "Tab $index",
-                        tint = if (topBarChange == topBar) {
-                            ActiveOrange
-                        } else {
-                            InactiveGray
-                        },
-                        modifier = Modifier.size(30.dp)
-                    )
-                }
-                }
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = 24.dp,
+                vertical = 16.dp
+            ),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        tabs.forEachIndexed { index, tab ->
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+                        topBarChangeSet(tab)
+                    }
+                    .padding(vertical = 8.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = tab.icon,
+                    contentDescription = "Tab $index",
+                    tint = if (topBarChange == tab) {
+                        ActiveOrange
+                    } else {
+                        InactiveGray
+                    },
+                    modifier = Modifier.size(30.dp)
+                )
             }
+        }
     }
     @Composable
     fun a() {
@@ -361,13 +360,13 @@ private fun Header(
             Column(modifier = Modifier.padding(start = 11.dp)) {
                 Text(
                     text = "Kalkulator",
-                    color = Ink,
+                    color = ink,
                     fontSize = 19.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = "HITUNG DENGAN MUDAH",
-                    color = MutedInk,
+                    color = mutedInk,
                     fontSize = 9.sp,
                     fontWeight = FontWeight.SemiBold,
                     letterSpacing = 1.2.sp
@@ -421,7 +420,7 @@ private fun DisplayPanel(
                     ) {
                  /** Text(
                     text = "HASIL SAAT INI",
-                    color = MutedInk,
+                    color = mutedInk,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.2.sp
@@ -439,7 +438,7 @@ private fun DisplayPanel(
                     Text(
                         text = expression.toDisplayExpression().ifEmpty { "0" },
                         modifier = Modifier.fillMaxWidth(),
-                        color = Ink,
+                        color = ink,
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Medium,
                         textAlign = TextAlign.End,
@@ -542,12 +541,12 @@ private fun CalculatorKey(
     onKeyPress: (String) -> Unit
 ) {
     val background = when (style) {
-        KeyStyle.Number -> NumberKey
-        KeyStyle.Function -> FunctionKey
-        KeyStyle.Operator -> OperatorKey
-        KeyStyle.Equals -> EqualsKey
+        KeyStyle.Number -> numberKey
+        KeyStyle.Function -> functionKey
+        KeyStyle.Operator -> operatorKey
+        KeyStyle.Equals -> equalsKey
     }
-    val foreground = if (style == KeyStyle.Equals) Color.White else Ink
+    val foreground = if (style == KeyStyle.Equals) Color.White else ink
 
     Surface(
         onClick = { onKeyPress(label) },
@@ -570,41 +569,71 @@ private fun CalculatorKey(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "Header")
 @Composable
-fun MainScreenPreview(code: Int = 1) {
-    val viewModel: CalculatorViewModel = viewModel()
-    when (code) {
-        2 -> {
-            App4Theme(
-                darkTheme = true
-            ) {
-                MainScreen(viewModel = viewModel)
+fun HeaderPreview() {
+    val selectedTab = remember { mutableStateOf(TopBarList.MAIN) }
+
+    App4Theme {
+        Header(
+            topBarChange = selectedTab.value,
+            topBarChangeSet = { selectedTab.value = it }
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Header - Lainnya")
+@Composable
+fun HeaderPreviewOtherTab() {
+    val selectedTab = remember { mutableStateOf(TopBarList.LAINNYA) }
+
+    App4Theme {
+        Header(
+            topBarChange = selectedTab.value,
+            topBarChangeSet = { selectedTab.value = it }
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Display Panel")
+@Composable
+fun DisplayPanelPreview() {
+    App4Theme {
+        DisplayPanel(
+            modifier = Modifier.fillMaxWidth(),
+            topBarChange = TopBarList.MAIN,
+            expression = "123 + 456",
+            preview = 579.0,
+            onBackspace = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Main Screen")
+@Composable
+fun MainScreenPreview() {
+    App4Theme {
+        val previewViewModel = remember {
+            CalculatorViewModel().apply {
+                topBarChangeSet(TopBarList.MAIN)
             }
         }
-        3 -> {
-            App4Theme(
-                darkTheme = false
-            ) {
-                viewModel.topBarChangeSet(TopBarList.LAINNYA)
-                MainScreen(viewModel = viewModel)
+
+        MainScreen(viewModel = previewViewModel)
+    }
+}
+
+@Preview(showBackground = true, name = "Main Screen - Lainnya")
+@Composable
+fun MainScreenPreviewOtherTab() {
+    App4Theme {
+        val previewViewModel = remember {
+            CalculatorViewModel().apply {
+                topBarChangeSet(TopBarList.LAINNYA)
             }
         }
-        4 -> {
-            App4Theme(
-                darkTheme = true
-            ) {
-                viewModel.topBarChangeSet(TopBarList.LAINNYA)
-                MainScreen(viewModel = viewModel)
-            }
-        }
-        else -> {
-            App4Theme(
-                darkTheme = false
-            ) {
-                MainScreen(viewModel = viewModel)
-            }
-        }
+
+        MainScreen(viewModel = previewViewModel)
     }
 }
 

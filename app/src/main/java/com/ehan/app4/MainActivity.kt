@@ -527,7 +527,7 @@ private enum class KeyStyle {
     Equals
 }
 
-enum class TopBarList(icon: ImageVector) {
+enum class TopBarList(val icon: ImageVector) {
     MAIN(Icons.Outlined.Calculate),
     UANG(Icons.AutoMirrored.Filled.Backspace),
     LAINNYA(Icons.Outlined.Calculate);

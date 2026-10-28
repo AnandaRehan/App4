@@ -274,7 +274,7 @@ private fun Header(
             )
 
             tabs.forEachIndexed { index, topBar ->
-            
+                if (topBar != topBarChange) {
                 Box(
                     modifier = Modifier
                         .weight(1f)
@@ -294,6 +294,7 @@ private fun Header(
                         },
                         modifier = Modifier.size(30.dp)
                     )
+                }
                 }
             }
     }

@@ -87,6 +87,8 @@ private val NumberKey = Color(0xFFE8E9FA)
 private val FunctionKey = Color(0xFFD8F0EA)
 private val OperatorKey = Color(0xFFD9EBF7)
 private val EqualsKey = Color(0xFF5CB7A5)
+private val InactiveGray = Color(0xFF777777)
+private val ActiveOrange = Color(0xFFFF7043)
 
 @Composable
 private fun CalculatorScreen(viewModel: CalculatorViewModel) {
@@ -253,6 +255,48 @@ private fun Header(
     topBarChangeSet: (TopBarList) -> Unit
 ) {
     Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = 24.dp,
+                    vertical = 16.dp
+                ),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            val tabs = listOf(
+                TopBarList.MAIN,
+                TopBarList.UANG,
+                TopBarList.LAINNYA
+            )
+
+            tabs.forEachIndexed { index, topBar ->
+            
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable {
+                            topBarChangeSet(topBar)
+                        }
+                        .padding(vertical = 8.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = topBar.icon,
+                        contentDescription = "Tab $index",
+                        tint = if (topBarChange == topBar) {
+                            ActiveOrange
+                        } else {
+                            InactiveGray
+                        },
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
+            }
+    }
+    fun a() {
+        
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 3.dp),
@@ -269,10 +313,9 @@ private fun Header(
                     Text(
                         text = "More",
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp),
-                        color = Color(0xFF67689A),
                         fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 0.8.sp)
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
 
@@ -340,6 +383,7 @@ private fun Header(
                 letterSpacing = 0.8.sp
             )
         }*/
+    }
     }
 }
 
@@ -479,10 +523,10 @@ private enum class KeyStyle {
     Equals
 }
 
-enum class TopBarList {
-    MAIN,
-    UANG,
-    LAINNYA;
+enum class TopBarList(icon: Icons) {
+    MAIN(Icons.Default.Home),
+    UANG(Icons.Default.Dashboard),
+    LAINNYA(Icons.Default.ReceiptLong);
 }
 
 @Composable

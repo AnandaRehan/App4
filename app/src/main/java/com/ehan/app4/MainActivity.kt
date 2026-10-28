@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -296,6 +297,7 @@ private fun Header(
                 }
             }
     }
+    @Composable
     fun a() {
         
     Row(
@@ -526,9 +528,9 @@ private enum class KeyStyle {
 }
 
 enum class TopBarList(icon: ImageVector) {
-    MAIN(Icons.Default.Home),
-    UANG(Icons.Default.Dashboard),
-    LAINNYA(Icons.Default.ReceiptLong);
+    MAIN(Icons.Outlined.Calculate),
+    UANG(Icons.AutoMirrored.Filled.Backspace),
+    LAINNYA(Icons.Outlined.Calculate);
 }
 
 @Composable
